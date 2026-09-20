@@ -1,0 +1,69 @@
+[project]
+name = "ipinn-pmsm"
+version = "0.1.0"
+description = "Inverse physics-informed neural network that recovers a PMSM's permanent-magnet flux linkage from drive terminal signals"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Ehsan Mazaheri Tehrani" }]
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "jax>=0.4.35",
+  "optax>=0.2.4",
+]
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.8"]
+
+[project.scripts]
+ipinn-pmsm = "ipinn_pmsm.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/emazaheri/ipinn-pmsm"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ipinn_pmsm"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "ruff>=0.8",
+  "mypy>=1.13",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF", "D"]
+ignore = [
+  "D107", # __init__ is documented on the class
+  "D203", # incompatible with D211
+  "D213", # incompatible with D212
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D103"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+# No python_version pin: it must match the interpreter mypy runs under, or
+# JAX's own stubs fail to parse with a syntax error about type parameter lists.
+strict = true
+files = ["src", "tests"]
+# JAX and optax ship partial stubs; their internals are not our contract.
+[[tool.mypy.overrides]]
+module = ["jax.*", "jaxlib.*", "optax.*", "matplotlib.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

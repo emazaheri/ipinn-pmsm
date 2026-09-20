@@ -1,0 +1,19 @@
+title = "Ideal plant: no saturation, no inverter non-idealities, no noise"
+published_error_pct = 0.81
+
+[plant]
+rs = 0.46
+ld = 0.00466
+lq = 0.0135
+lambda_m = 0.206
+pole_pairs = 4
+beta_d = 0.0
+beta_q = 0.0
+
+[inverter]
+v_dc = 400.0
+
+[sim]
+# The reference labelled its samples with linspace rather than step * ts, which
+# is 50 ppm wide and is why the published run has 142 windows and not 133.
+legacy_time_axis = true

@@ -1,0 +1,25 @@
+title = "Hot motor: weakened magnet and a stator resistance the estimator has wrong"
+published_error_pct = 2.13
+
+[plant]
+# Both changes are thermal and occur together in a real machine. The magnet
+# has lost 7% of its flux, and the copper is 13% more resistive.
+rs = 0.52
+ld = 0.00466
+lq = 0.0135
+lambda_m = 0.191
+pole_pairs = 4
+beta_d = 0.000575
+beta_q = 0.000891
+
+[known]
+# The estimator is still working from the cold commissioning sheet. This one
+# line is worth 1.1 percentage points of error, and it is the whole reason
+# case C is harder than case B rather than merely different.
+rs = 0.46
+
+[inverter]
+v_dc = 400.0
+
+[sim]
+legacy_time_axis = true

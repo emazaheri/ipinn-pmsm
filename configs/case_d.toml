@@ -1,0 +1,25 @@
+title = "Saturation plus measurement noise on currents and voltages"
+published_error_pct = 2.11
+
+[plant]
+rs = 0.46
+ld = 0.00466
+lq = 0.0135
+lambda_m = 0.206
+pole_pairs = 4
+beta_d = 0.000575
+beta_q = 0.000891
+
+[inverter]
+v_dc = 400.0
+
+[sim]
+legacy_time_axis = true
+
+[noise]
+current_percent = 10.0
+voltage_percent = 5.0
+seed = 42
+# The reference seeded NumPy's global legacy generator, so reproducing its
+# exact realisation means using the same one.
+legacy_rng = true

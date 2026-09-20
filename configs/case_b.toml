@@ -1,0 +1,19 @@
+title = "Magnetic saturation, which the estimator does not model"
+published_error_pct = 0.95
+
+[plant]
+rs = 0.46
+ld = 0.00466
+lq = 0.0135
+lambda_m = 0.206
+pole_pairs = 4
+# The plant's inductances fall with current. The estimator's residual uses the
+# unsaturated values, so this is a model mismatch, not a harder fit.
+beta_d = 0.000575
+beta_q = 0.000891
+
+[inverter]
+v_dc = 400.0
+
+[sim]
+legacy_time_axis = true
