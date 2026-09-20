@@ -12,7 +12,7 @@ The package is layered so each piece can be tested and ported on its own:
                 identifiability
 ``windows``     cutting a record into estimation windows
 ``pinn``        the network, the physics loss and the optimiser
-``fixtures``    golden vectors for the TypeScript twin
+``fixtures``    golden vectors for checking an independent port
 """
 
 from .params import (

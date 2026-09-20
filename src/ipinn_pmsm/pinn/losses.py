@@ -3,10 +3,10 @@
 The physics term is where the inverse problem lives. It needs the derivative of
 the network's current outputs with respect to the network's *time input*, which
 is a derivative of an output with respect to an input, not with respect to a
-parameter. Under JAX that is one `jax.grad` per output composed with `vmap`;
-the TypeScript twin gets it by propagating a tangent through the forward pass
-and then differentiating that whole augmented computation. Both are asserted
-against the same fixtures.
+parameter. Under JAX that is one `jax.grad` per output composed with `vmap`.
+A port without autodiff can get the same thing by propagating a tangent through
+the forward pass and then differentiating that augmented computation; either
+way `ipinn_pmsm.fixtures` is what holds the two to the same answer.
 
 Two things about the residual are easy to get wrong and are therefore spelled
 out here.

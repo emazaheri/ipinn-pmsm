@@ -9,10 +9,6 @@ been overheated, over-driven or simply aged carries less flux, and the machine's
 torque per ampere falls with it. Measuring that without taking the motor apart
 means inferring it from what the drive already logs.
 
-This repository is the reference implementation behind the interactive demo at
-[emazaheri.com](https://emazaheri.com), and it is the source of the golden
-vectors that the browser port is tested against.
-
 ## The idea
 
 A physics-informed network is fitted to a short window of measured signals. It
@@ -40,7 +36,7 @@ L = α·L_supervised + β·(mean r_d² + mean r_q²)
 The window is short (15 ms, 14 samples at 1 kHz), a fresh network is fitted to
 each one, and the two second record yields 142 independent estimates. That is
 the whole method: no pretrained weights, no labels for the parameter, and a
-model small enough that all of it runs in a browser tab.
+model small enough to fit in a few kilobytes of state.
 
 ## Identifiability, which is the interesting part
 
@@ -73,7 +69,7 @@ prediction the plots confirm or refute, not a claim in a caption.
 | `scenarios.py` | The eight-combination excitation and the speed step |
 | `windows.py` | Cutting a record into estimation windows |
 | `pinn/` | The network, the physics loss, and the rprop training loop |
-| `fixtures.py` | Golden-vector export for the TypeScript twin |
+| `fixtures.py` | Golden-vector export, for checking an independent port |
 
 ## Run
 
@@ -85,7 +81,7 @@ uv run ipinn-pmsm run --case c        # hot motor: weak magnet and wrong Rs
 uv run ipinn-pmsm run --case d        # saturation plus measurement noise
 uv run ipinn-pmsm run --case all --check   # assert every published figure
 uv run ipinn-pmsm describe --case c        # print what a case gets wrong
-uv run ipinn-pmsm export-fixtures --out ../../components/sections/observer/fixtures
+uv run ipinn-pmsm export-fixtures --out ./fixtures    # golden vectors for a port
 ```
 
 The four cases are TOML files in `configs/`, not four copies of a script.
@@ -188,27 +184,6 @@ t = 1.0 s, so 209 rad/s of change lands inside 13 ms. It comes back 39% wrong
 while both its neighbours are correct to better than 0.01%. Medians are
 therefore far below means in every case: case A's median error is 0.00%
 against a mean of 0.81%.
-
-## The browser port
-
-`components/sections/observer/` on the website carries a TypeScript twin: the
-same simulator, the same network, and hand-derived forward-over-reverse
-gradients in place of JAX. `export-fixtures` writes the golden vectors its test
-suite asserts against, so the two cannot drift silently.
-
-Exact parity is not the goal and is not achievable: JAX runs float32 and
-reassociates, the port runs float64, and JAX's threefry PRNG has no TypeScript
-equivalent, so the shipped run initialises differently and matches in aggregate
-rather than window for window. What *is* asserted exactly is the simulator
-trace, the forward pass, the analytic gradients against finite differences, and
-the optimiser's step-size ladder.
-
-## Provenance
-
-Consolidated from four years of research code: a field-oriented drive simulator
-and a three-state inverse PINN, previously spread over seventeen
-copy-and-edited forks of one engine and four near-identical case scripts
-differing in two numbers each.
 
 ## Licence
 

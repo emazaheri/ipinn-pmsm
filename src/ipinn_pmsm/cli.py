@@ -98,7 +98,7 @@ def _describe(args: argparse.Namespace) -> int:
 
 
 def _export(args: argparse.Namespace) -> int:
-    """Write golden vectors for the TypeScript twin."""
+    """Write golden vectors for checking an independent port."""
     from .fixtures import export_all
 
     out = Path(args.out)

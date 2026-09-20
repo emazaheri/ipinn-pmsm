@@ -109,8 +109,8 @@ def check_lambda_gradient() -> int:
 
     The parameter enters only the q residual, so with
     ``physics = mean(r_d^2) + mean(r_q^2)`` the derivative is exactly
-    ``beta * 2 * mean(r_q * omega_e)``. This is the one gradient the browser
-    port computes analytically rather than by backpropagation, so it is worth
+    ``beta * 2 * mean(r_q * omega_e)``. It is the one gradient a port can
+    compute analytically rather than by backpropagation, so it is worth
     pinning separately.
 
     Returns:

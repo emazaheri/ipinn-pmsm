@@ -6,9 +6,9 @@ layers that is 1283 weights and biases, to which the trainable flux linkage
 adds one more.
 
 The network is deliberately tiny. It has to fit fourteen samples, not a
-dataset, and a fresh copy is trained for every one of the 142 windows. Size is
-also what makes the browser port possible: 1284 float64 values is 10 KB of
-state, and the whole forward pass is three small matrix products.
+dataset, and a fresh copy is trained for every one of the 142 windows. That
+size is the point: 1284 float64 values is 10 KB of state, and the whole
+forward pass is three small matrix products, so this runs anywhere.
 """
 
 from __future__ import annotations

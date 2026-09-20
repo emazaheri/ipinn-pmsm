@@ -2,9 +2,9 @@
 
 The reference study called ``scipy.integrate.odeint`` once per control step,
 which runs adaptive LSODA over a 100 us interval. This module uses classical
-fixed-step RK4 instead, for three reasons: it is deterministic, it is portable
-to the TypeScript twin that runs in the browser, and it is roughly two orders
-of magnitude faster. The difference between the two integrators is measured
+fixed-step RK4 instead, for three reasons: it is deterministic, it is
+portable to any language without an ODE suite, and it is roughly two orders of
+magnitude faster. The difference between the two integrators is measured
 once and recorded in a fixture rather than assumed to be negligible, so that
 "my RK4 agrees with your RK4" never gets confused with "your RK4 agrees with
 your odeint". See `ipinn_pmsm.fixtures`.

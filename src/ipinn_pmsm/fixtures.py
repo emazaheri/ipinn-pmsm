@@ -1,28 +1,27 @@
-"""Golden vectors for the TypeScript twin that runs in the browser.
+"""Golden vectors, for checking an independent reimplementation.
 
-The browser port reimplements all of this by hand: the drive simulator, the
-network, and forward-over-reverse derivatives in place of JAX. Two independent
-implementations of the same arithmetic drift unless something holds them
+Reimplementing this without JAX means writing the drive simulator, the network
+and the derivative of an output with respect to an input by hand. Two
+implementations of the same arithmetic drift apart unless something holds them
 together, and these files are that something.
 
 What can and cannot be asserted is worth being explicit about.
 
-**Exactly**: the simulator trace, the forward pass, the loss, and the
-analytic gradient. These are deterministic arithmetic on the same inputs, and
-the only difference is summation order.
+**Exactly**: the simulator trace, the forward pass, the loss and the analytic
+gradient. These are deterministic arithmetic on the same inputs, and the only
+difference is the order terms are summed in.
 
 **Not at all**: the weights a run starts from. JAX's threefry counter-based
-PRNG has no reasonable TypeScript equivalent, so the browser initialises with
-the same mulberry32 generator the other lab uses. The initial weights here are
-therefore *test data*, injected into the port so the two can be compared, and
-never shipped to a visitor. A deployed run matches the published numbers in
-aggregate, not window by window.
+PRNG is not reasonably reproducible elsewhere, so the initial weights exported
+here are *test data*, injected into the other implementation so the two can be
+compared on equal footing. A port that seeds itself will match the published
+numbers in aggregate, not window by window.
 
 **Statistically**: the per-window estimates after 150 rprop steps. Rprop moves
-by the *sign* of the gradient, so the two implementations track each other
-exactly until some component's sign disagrees near zero, then diverge by one
-step size in that component. The converged flux linkage agrees far better than
-the weights do, because it is the one strongly identified direction.
+by the *sign* of the gradient, so two implementations track each other exactly
+until some component's sign disagrees near zero, then diverge by one step size
+in that component. The converged flux linkage agrees far better than the
+weights do, because it is the one strongly identified direction.
 """
 
 from __future__ import annotations
@@ -130,7 +129,7 @@ def _forward_fixture(directory: Path) -> Path:
         {
             "description": (
                 "Forward pass and time derivatives for a fixed set of weights. "
-                "The weights are test data: the browser initialises its own. "
+                "The weights are test data; a port initialises its own. "
                 "Tolerance 1e-5 relative."
             ),
             "layers": list(config.layers),
@@ -268,8 +267,7 @@ def export_all(directory: Path) -> list[Path]:
     """Write every fixture into a directory, creating it if needed.
 
     Args:
-        directory: Destination. Usually the website's
-            ``components/sections/observer/fixtures``.
+        directory: Destination for the JSON files.
 
     Returns:
         The paths written, in order.
